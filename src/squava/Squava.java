@@ -29,7 +29,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JLabel;
 
 /**
- * @author iForgot321 2020-06-04
+ * @author iForgot321 
+ * @since 2020-06-04
  *
  */
 public class Squava extends JPanel implements ActionListener{
