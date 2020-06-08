@@ -291,7 +291,7 @@ public class Board {
                 return res;
             }
         }
-        return null;
+        return new int[1];
     }
 
     public List<Integer> getEmptyPositions(int playerNo) {
