@@ -29,8 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JLabel;
 
 /**
- * @author iForgot321 
- * @since 2020-06-04
+ * @author iForgot321 2020-06-04
  *
  */
 public class Squava extends JPanel implements ActionListener{
@@ -157,6 +156,10 @@ public class Squava extends JPanel implements ActionListener{
                     case 0:
                         board.performMove(-1, 0);
                         break;
+                    case 2:
+                        board.performMove(-1, 2);
+                        board.performMove(1, 5);
+                        break;
                     case 6:
                         board.performMove(-1, 6);
                         break;
@@ -205,6 +208,15 @@ public class Squava extends JPanel implements ActionListener{
             case "Opening 1":
                 break;
             case "Opening 2":
+                board.reset();
+                board.performMove(-1, 2);
+                board.performMove(1, 5);
+                playerNo = -1;
+                status = 0;
+                currOpening = 2;
+                humanPlayerNo = -1;
+                resetLabel();
+                repaint();
                 break;
             case "Opening 6":
                 board.reset();
@@ -264,7 +276,6 @@ public class Squava extends JPanel implements ActionListener{
             
             JMenuBar menuBar = new JMenuBar();
             JMenu menuFile = new JMenu("File");
-            JMenu menuStat = new JMenu("Statistics");
             JMenu menuHelp = new JMenu("About");
             JMenuItem exit = new JMenuItem("Exit");
             JMenuItem op0 = new JMenuItem("Opening 0");
@@ -285,13 +296,13 @@ public class Squava extends JPanel implements ActionListener{
             exit.addActionListener((ActionEvent e) -> {frame.dispose();});
             
             menuFile.add(op0);
+            menuFile.add(op2);
             menuFile.add(op6);
             menuFile.add(op12);
             menuFile.add(selfPlay);
             menuFile.add(exit);
 
             menuBar.add(menuFile);
-            menuBar.add(menuStat);
             menuBar.add(menuHelp);
             frame.setJMenuBar(menuBar);
             
@@ -308,6 +319,7 @@ public class Squava extends JPanel implements ActionListener{
         String file = "src/squava/resources/states_6.txt";
         String file2 = "src/squava/resources/states_12.txt";
         String file3 = "src/squava/resources/states_0.txt";
+        String file4 = "src/squava/resources/states_2.txt";
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             String st;
             while ((st = in.readLine()) != null) {
@@ -323,6 +335,13 @@ public class Squava extends JPanel implements ActionListener{
             }
         }
         try (BufferedReader in = new BufferedReader(new FileReader(file3))) {
+            String st;
+            while ((st = in.readLine()) != null) {
+                String[] temp = st.split(" ");
+                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
+            }
+        }
+        try (BufferedReader in = new BufferedReader(new FileReader(file4))) {
             String st;
             while ((st = in.readLine()) != null) {
                 String[] temp = st.split(" ");
