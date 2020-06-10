@@ -110,6 +110,7 @@ public class Squava extends JPanel implements ActionListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (status != 0 && board.showEnding().length >= 3) {
             if (status == 1) {
@@ -127,9 +128,6 @@ public class Squava extends JPanel implements ActionListener{
             g2.drawLine(i, 50, i, 300);
             g2.drawLine(50, i, 300, i);
         }
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.black);
 
         long omask = 1 << 24;
         long xmask = omask << 25;
@@ -156,12 +154,19 @@ public class Squava extends JPanel implements ActionListener{
                     case 0:
                         board.performMove(-1, 0);
                         break;
+                    case 1:
+                        board.performMove(-1, 1);
+                        break;
                     case 2:
                         board.performMove(-1, 2);
                         board.performMove(1, 5);
                         break;
                     case 6:
                         board.performMove(-1, 6);
+                        break;
+                    case 7:
+                        board.performMove(-1, 7);
+                        board.performMove(1, 21);
                         break;
                     case 12:
                         board.performMove(-1, 12);
@@ -206,6 +211,14 @@ public class Squava extends JPanel implements ActionListener{
                 repaint();
                 break;
             case "Opening 1":
+                board.reset();
+                board.performMove(-1, 1);
+                playerNo = 1;
+                status = 0;
+                currOpening = 1;
+                humanPlayerNo = 1;
+                resetLabel();
+                repaint();
                 break;
             case "Opening 2":
                 board.reset();
@@ -229,6 +242,15 @@ public class Squava extends JPanel implements ActionListener{
                 repaint();
                 break;
             case "Opening 7":
+                board.reset();
+                board.performMove(-1, 7);
+                board.performMove(1, 21);
+                playerNo = -1;
+                status = 0;
+                currOpening = 7;
+                humanPlayerNo = -1;
+                resetLabel();
+                repaint();
                 break;
             case "Opening 12":
                 board.reset();
@@ -296,8 +318,10 @@ public class Squava extends JPanel implements ActionListener{
             exit.addActionListener((ActionEvent e) -> {frame.dispose();});
             
             menuFile.add(op0);
+            menuFile.add(op1);
             menuFile.add(op2);
             menuFile.add(op6);
+            menuFile.add(op7);
             menuFile.add(op12);
             menuFile.add(selfPlay);
             menuFile.add(exit);
@@ -320,6 +344,8 @@ public class Squava extends JPanel implements ActionListener{
         String file2 = "src/squava/resources/states_12.txt";
         String file3 = "src/squava/resources/states_0.txt";
         String file4 = "src/squava/resources/states_2.txt";
+        String file5 = "src/squava/resources/states_7.txt";
+        String file6 = "src/squava/resources/states_1.txt";
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
             String st;
             while ((st = in.readLine()) != null) {
@@ -342,6 +368,20 @@ public class Squava extends JPanel implements ActionListener{
             }
         }
         try (BufferedReader in = new BufferedReader(new FileReader(file4))) {
+            String st;
+            while ((st = in.readLine()) != null) {
+                String[] temp = st.split(" ");
+                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
+            }
+        }
+        try (BufferedReader in = new BufferedReader(new FileReader(file5))) {
+            String st;
+            while ((st = in.readLine()) != null) {
+                String[] temp = st.split(" ");
+                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
+            }
+        }
+        try (BufferedReader in = new BufferedReader(new FileReader(file6))) {
             String st;
             while ((st = in.readLine()) != null) {
                 String[] temp = st.split(" ");
