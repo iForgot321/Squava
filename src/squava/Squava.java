@@ -340,48 +340,8 @@ public class Squava extends JPanel implements ActionListener{
     }
 
     static void createStates() throws IOException {
-        String file = "src/squava/resources/states_6.txt";
-        String file2 = "src/squava/resources/states_12.txt";
-        String file3 = "src/squava/resources/states_0.txt";
-        String file4 = "src/squava/resources/states_2.txt";
-        String file5 = "src/squava/resources/states_7.txt";
-        String file6 = "src/squava/resources/states_1.txt";
+        String file = "src/squava/resources/states.txt";
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            String st;
-            while ((st = in.readLine()) != null) {
-                String[] temp = st.split(" ");
-                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
-            }
-        }
-        try (BufferedReader in = new BufferedReader(new FileReader(file2))) {
-            String st;
-            while ((st = in.readLine()) != null) {
-                String[] temp = st.split(" ");
-                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
-            }
-        }
-        try (BufferedReader in = new BufferedReader(new FileReader(file3))) {
-            String st;
-            while ((st = in.readLine()) != null) {
-                String[] temp = st.split(" ");
-                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
-            }
-        }
-        try (BufferedReader in = new BufferedReader(new FileReader(file4))) {
-            String st;
-            while ((st = in.readLine()) != null) {
-                String[] temp = st.split(" ");
-                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
-            }
-        }
-        try (BufferedReader in = new BufferedReader(new FileReader(file5))) {
-            String st;
-            while ((st = in.readLine()) != null) {
-                String[] temp = st.split(" ");
-                cache.put(Long.parseLong(temp[0]), Integer.parseInt(temp[1]));
-            }
-        }
-        try (BufferedReader in = new BufferedReader(new FileReader(file6))) {
             String st;
             while ((st = in.readLine()) != null) {
                 String[] temp = st.split(" ");
