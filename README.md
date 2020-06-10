@@ -14,3 +14,7 @@ In the source folder there is the Agent.java abstract class and an AlphaBetaAgen
 To initialize the database, the program takes all the values from the states.txt file in the resources folder and stores them in a hashmap with the state as the key and the move to be played as the value. At every state when it is black's turn, the program sees whether or not the states exists in the hashmap. If it does exists, the program plays the value, and if it does not exist, the program plays a move calculated from the AlphaBetaAgent. States that are not recorded in the database are all the one move winning plays. 
 
 Much of the inspiration for this project comes from [bediger4000's github repository](https://github.com/bediger4000/squava), where he creates agents in Golang that are able to play fairly well. Squava is beginner-friendly game to test out some of the search techniques that programmers have refined over the years, and is a very nice introduction into game-searching along with other similar games. 
+
+![Squava Openings](https://raw.githubusercontent.com/iForgot321/squava/master/squavaOpenings.png)
+
+*All openings corresponding to winning colour*
