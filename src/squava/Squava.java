@@ -1,32 +1,16 @@
 package squava;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import java.awt.Color;
-import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.EventQueue;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Font;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JLabel;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author iForgot321 2020-06-04
@@ -57,7 +41,7 @@ public class Squava extends JPanel implements ActionListener{
         undo.addActionListener(this);
 
         losingLabel = new JLabel("");
-        losingLabel.setFont(new Font("Helvetica", 1, 24));
+        losingLabel.setFont(new Font("Helvetica", Font.BOLD, 24));
         JPanel losingPanel = new JPanel(new BorderLayout());
         losingPanel.setBackground(Color.WHITE);
         losingPanel.add(losingLabel);
@@ -129,19 +113,19 @@ public class Squava extends JPanel implements ActionListener{
             g2.drawLine(50, i, 300, i);
         }
 
-        long omask = 1 << 24;
-        long xmask = omask << 25;
+        long oMask = 1 << 24;
+        long xMask = oMask << 25;
         for (int i = 0; i < 25; i++) {
-            if ((board.getBoardValue() & omask) != 0) {
+            if ((board.getBoardValue() & oMask) != 0) {
                 g2.setColor(Color.white);
                 g2.fillOval(57 + 50 * (i % 5), 57 + 50 * (i / 5), 36, 36);
                 g2.setColor(Color.black);
                 g2.drawOval(57 + 50 * (i % 5), 57 + 50 * (i / 5), 36, 36);
-            } else if ((board.getBoardValue() & xmask) != 0) {
+            } else if ((board.getBoardValue() & xMask) != 0) {
                 g2.fillOval(57 + 50 * (i % 5), 57 + 50 * (i / 5), 36, 36);
             }
-            omask >>= 1;
-            xmask >>= 1;
+            oMask >>= 1;
+            xMask >>= 1;
         }
     }
     
@@ -288,7 +272,7 @@ public class Squava extends JPanel implements ActionListener{
         try {
             createStates();
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         EventQueue.invokeLater(() -> {
             JFrame frame = new JFrame("Squava");
@@ -315,7 +299,7 @@ public class Squava extends JPanel implements ActionListener{
             op7.addActionListener(s);
             op12.addActionListener(s);
             selfPlay.addActionListener(s);
-            exit.addActionListener((ActionEvent e) -> {frame.dispose();});
+            exit.addActionListener(e -> frame.dispose());
             
             menuFile.add(op0);
             menuFile.add(op1);
@@ -353,20 +337,20 @@ public class Squava extends JPanel implements ActionListener{
     static Board getMove(Board board, Agent ab, int playerNo) {
         if (cache.containsKey(board.getBoardValue())) {
             board.performMove(playerNo, cache.get(board.getBoardValue()));
-        } else if (cache.containsKey(Board.diagFlip(board.getBoardValue()))) {
-            int pos = cache.get(Board.diagFlip(board.getBoardValue()));
+        } else if (cache.containsKey(Board.diagonalFlip(board.getBoardValue()))) {
+            int pos = cache.get(Board.diagonalFlip(board.getBoardValue()));
             int x = 4 - (pos % 5), y = 4 - (pos / 5);
             board.performMove(playerNo, 5 * x + y);
-        } else if (cache.containsKey(Board.antiDiagFlip(board.getBoardValue()))) {
-            int pos = cache.get(Board.antiDiagFlip(board.getBoardValue()));
+        } else if (cache.containsKey(Board.antiDiagonalFlip(board.getBoardValue()))) {
+            int pos = cache.get(Board.antiDiagonalFlip(board.getBoardValue()));
             int x = pos % 5, y = pos / 5;
             board.performMove(playerNo, 5 * x + y);
-        } else if (cache.containsKey(Board.vertFlip(board.getBoardValue()))) {
-            int pos = cache.get(Board.vertFlip(board.getBoardValue()));
+        } else if (cache.containsKey(Board.verticalFlip(board.getBoardValue()))) {
+            int pos = cache.get(Board.verticalFlip(board.getBoardValue()));
             int x = pos % 5, y = 4 - (pos / 5);
             board.performMove(playerNo, 5 * y + x);
-        } else if (cache.containsKey(Board.horiFlip(board.getBoardValue()))) {
-            int pos = cache.get(Board.horiFlip(board.getBoardValue()));
+        } else if (cache.containsKey(Board.horizontalFlip(board.getBoardValue()))) {
+            int pos = cache.get(Board.horizontalFlip(board.getBoardValue()));
             int x = 4 - (pos % 5), y = pos / 5;
             board.performMove(playerNo, 5 * y + x);
         } else {

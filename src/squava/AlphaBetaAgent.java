@@ -10,7 +10,7 @@ public class AlphaBetaAgent extends Agent {
     int depth;
     Board bestMove;
     long count;
-    Map<Long, Hashentry> cache;
+    Map<Long, HashEntry> cache;
 
     public AlphaBetaAgent(int depth) {
         super();
@@ -23,7 +23,6 @@ public class AlphaBetaAgent extends Agent {
         count = 0;
         cache = new HashMap<>();
         search(board, this.depth, Integer.MIN_VALUE+1, Integer.MAX_VALUE, playerNo);
-//        System.out.println(count);
         return this.bestMove;
     }
 
@@ -43,7 +42,7 @@ public class AlphaBetaAgent extends Agent {
                 return 0;
             default:
                 int alphaO = alpha;
-                Hashentry ttEntry = ttLookUp(board.getBoardValue());
+                HashEntry ttEntry = ttLookUp(board.getBoardValue());
                 if (ttEntry != null) {
                     switch (ttEntry.flag) {
                         case 0:
@@ -95,27 +94,27 @@ public class AlphaBetaAgent extends Agent {
                     }
                 }
                 if (value <= alphaO) {
-                    cache.put(board.getBoardValue(), new Hashentry(value, (byte) 2));
+                    cache.put(board.getBoardValue(), new HashEntry(value, (byte) 2));
                 } else if (value >= beta) {
-                    cache.put(board.getBoardValue(), new Hashentry(value, (byte) 1));
+                    cache.put(board.getBoardValue(), new HashEntry(value, (byte) 1));
                 } else {
-                    cache.put(board.getBoardValue(), new Hashentry(value, (byte) 0));
+                    cache.put(board.getBoardValue(), new HashEntry(value, (byte) 0));
                 }
                 return value;
         }
     }
     
-    private Hashentry ttLookUp(long board) {
+    private HashEntry ttLookUp(long board) {
         if (cache.containsKey(board)) {
             return cache.get(board);
-        } else if (cache.containsKey(Board.diagFlip(board))) {
-            return cache.get(Board.diagFlip(board));
-        } else if (cache.containsKey(Board.antiDiagFlip(board))) {
-            return cache.get(Board.antiDiagFlip(board));
-        } else if (cache.containsKey(Board.vertFlip(board))) {
-            return cache.get(Board.vertFlip(board));
-        } else if (cache.containsKey(Board.horiFlip(board))) {
-            return cache.get(Board.horiFlip(board));
+        } else if (cache.containsKey(Board.diagonalFlip(board))) {
+            return cache.get(Board.diagonalFlip(board));
+        } else if (cache.containsKey(Board.antiDiagonalFlip(board))) {
+            return cache.get(Board.antiDiagonalFlip(board));
+        } else if (cache.containsKey(Board.verticalFlip(board))) {
+            return cache.get(Board.verticalFlip(board));
+        } else if (cache.containsKey(Board.horizontalFlip(board))) {
+            return cache.get(Board.horizontalFlip(board));
         } else {
             return null;
         }
@@ -123,12 +122,12 @@ public class AlphaBetaAgent extends Agent {
 
 }
 
-class Hashentry {
+class HashEntry {
 
     public byte flag;
     public int value;
 
-    public Hashentry(int value, byte flag) {
+    public HashEntry(int value, byte flag) {
         this.flag = flag;
         this.value = value;
     }

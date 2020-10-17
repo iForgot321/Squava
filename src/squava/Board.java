@@ -9,7 +9,7 @@ public class Board {
     private long boardValue;
     private int totalMoves;
     private int prevMove;
-    private List<Integer> allMoves;
+    private final List<Integer> allMoves;
 
     public static final int DEFAULT_BOARD_SIZE = 5;
     public static final int IN_PROGRESS = -2;
@@ -92,25 +92,15 @@ public class Board {
         this.totalMoves = board.totalMoves;
         this.prevMove = board.prevMove;
         this.allMoves = new ArrayList<>();
-        board.getAllMoves().forEach((p) -> {
-            this.allMoves.add(p);
-        });
+        this.allMoves.addAll(board.getAllMoves());
         this.P1winningMoves = new HashSet<>();
         this.P1losingMoves = new HashSet<>();
         this.P2winningMoves = new HashSet<>();
         this.P2losingMoves = new HashSet<>();
-        board.P1losingMoves.forEach((i) -> {
-            this.P1losingMoves.add(i);
-        });
-        board.P2losingMoves.forEach((i) -> {
-            this.P2losingMoves.add(i);
-        });
-        board.P1winningMoves.forEach((i) -> {
-            this.P1winningMoves.add(i);
-        });
-        board.P2winningMoves.forEach((i) -> {
-            this.P2winningMoves.add(i);
-        });
+        this.P1losingMoves.addAll(board.P1losingMoves);
+        this.P2losingMoves.addAll(board.P2losingMoves);
+        this.P1winningMoves.addAll(board.P1winningMoves);
+        this.P2winningMoves.addAll(board.P2winningMoves);
     }
 
     public void performMove(int playerNo, int position) {
@@ -121,11 +111,11 @@ public class Board {
             if (x + 3 * dir[0] <= 4 && x + 3 * dir[0] >= 0 && y + 3 * dir[1] <= 4 && y + 3 * dir[1] >= 0
                     && (boardValue & mask(x + 3 * dir[0], y + 3 * dir[1], playerNo)) != 0) {
                 if ((boardValue & mask(x + dir[0], y + dir[1], playerNo)) != 0
-                        && (boardValue & mask(x + 2 * dir[0], y + 2 * dir[1], 0 - playerNo)) == 0) {
+                        && (boardValue & mask(x + 2 * dir[0], y + 2 * dir[1], -playerNo)) == 0) {
                     getWinningMoves(playerNo).add(5 * (x + 2 * dir[0]) + y + 2 * dir[1]);
                     getLosingMoves(playerNo).remove(5 * (x + 2 * dir[0]) + y + 2 * dir[1]);
                 } else if ((boardValue & mask(x + 2 * dir[0], y + 2 * dir[1], playerNo)) != 0
-                        && (boardValue & mask(x + dir[0], y + dir[1], 0 - playerNo)) == 0) {
+                        && (boardValue & mask(x + dir[0], y + dir[1], -playerNo)) == 0) {
                     getWinningMoves(playerNo).add(5 * (x + dir[0]) + y + dir[1]);
                     getLosingMoves(playerNo).remove(5 * (x + dir[0]) + y + dir[1]);
                 }
@@ -134,33 +124,33 @@ public class Board {
                     && x - dir[0] <= 4 && x - dir[0] >= 0 && y - dir[1] <= 4 && y - dir[1] >= 0
                     && (boardValue & mask(x + 2 * dir[0], y + 2 * dir[1], playerNo)) != 0
                     && (boardValue & mask(x - dir[0], y - dir[1], playerNo)) != 0
-                    && (boardValue & mask(x + dir[0], y + dir[1], 0 - playerNo)) == 0) {
+                    && (boardValue & mask(x + dir[0], y + dir[1], -playerNo)) == 0) {
                 getWinningMoves(playerNo).add(5 * (x + dir[0]) + y + dir[1]);
                 getLosingMoves(playerNo).remove(5 * (x + dir[0]) + y + dir[1]);
             }
             if (x + 2 * dir[0] <= 4 && x + 2 * dir[0] >= 0 && y + 2 * dir[1] <= 4 && y + 2 * dir[1] >= 0
                     && (boardValue & mask(x + 2 * dir[0], y + 2 * dir[1], playerNo)) != 0
-                    && (boardValue & mask(x + dir[0], y + dir[1], 0 - playerNo)) == 0
+                    && (boardValue & mask(x + dir[0], y + dir[1], -playerNo)) == 0
                     && !getWinningMoves(playerNo).contains(5 * (x + dir[0]) + y + dir[1])) {
                 getLosingMoves(playerNo).add(5 * (x + dir[0]) + y + dir[1]);
             }
             if (x + dir[0] <= 4 && x + dir[0] >= 0 && y + dir[1] <= 4 && y + dir[1] >= 0
                     && (boardValue & mask(x + dir[0], y + dir[1], playerNo)) != 0) {
                 if (x + 2 * dir[0] <= 4 && x + 2 * dir[0] >= 0 && y + 2 * dir[1] <= 4 && y + 2 * dir[1] >= 0
-                        && (boardValue & mask(x + 2 * dir[0], y + 2 * dir[1], 0 - playerNo)) == 0
+                        && (boardValue & mask(x + 2 * dir[0], y + 2 * dir[1], -playerNo)) == 0
                         && !getWinningMoves(playerNo).contains(5 * (x + 2 * dir[0]) + y + 2 * dir[1])) {
                     getLosingMoves(playerNo).add(5 * (x + 2 * dir[0]) + y + 2 * dir[1]);
                 }
                 if (y - dir[1] <= 4 && y - dir[1] >= 0 && x - dir[0] <= 4 && x - dir[0] >= 0
-                        && (boardValue & mask(x - dir[0], y - dir[1], 0 - playerNo)) == 0
+                        && (boardValue & mask(x - dir[0], y - dir[1], -playerNo)) == 0
                         && !getWinningMoves(playerNo).contains(5 * (x - dir[0]) + y - dir[1])) {
                     getLosingMoves(playerNo).add(5 * (x - dir[0]) + y - dir[1]);
                 }
             }
         }
 
-        getWinningMoves(0 - playerNo).remove(5 * x + y);
-        getLosingMoves(0 - playerNo).remove(5 * x + y);
+        getWinningMoves(-playerNo).remove(5 * x + y);
+        getLosingMoves(-playerNo).remove(5 * x + y);
         boardValue |= mask(position / DEFAULT_BOARD_SIZE, position % DEFAULT_BOARD_SIZE, playerNo);
         prevMove = position;
         allMoves.add(position);
@@ -259,34 +249,34 @@ public class Board {
         long shift = boardValue >> 25;
         for (int mask : WIN_MASKS) {
             if ((boardValue & mask) == mask || (shift & mask) == mask) {
-                long tmask = 1 << 24;
+                long tMask = 1 << 24;
                 int[] res = new int[4];
                 int count = 0;
                 for (int i = 0; i < 25; i++) {
-                    if ((tmask & mask) != 0) {
+                    if ((tMask & mask) != 0) {
                         res[count] = i;
                         if (++count == 4) {
                             break;
                         }
                     }
-                    tmask >>= 1;
+                    tMask >>= 1;
                 }
                 return res;
             }
         }
         for (int mask : LOSE_MASKS) {
             if ((boardValue & mask) == mask || (shift & mask) == mask) {
-                long tmask = 1 << 24;
+                long tMask = 1 << 24;
                 int[] res = new int[3];
                 int count = 0;
                 for (int i = 0; i < 25; i++) {
-                    if ((tmask & mask) != 0) {
+                    if ((tMask & mask) != 0) {
                         res[count] = i;
                         if (++count == 3) {
                             break;
                         }
                     }
-                    tmask >>= 1;
+                    tMask >>= 1;
                 }
                 return res;
             }
@@ -297,28 +287,24 @@ public class Board {
     public List<Integer> getEmptyPositions(int playerNo) {
         List<Integer> emptyPositions = new ArrayList<>();
         if (!getWinningMoves(playerNo).isEmpty()) {
-            getWinningMoves(playerNo).forEach((i) -> {
-                emptyPositions.add(i);
-            });
+            emptyPositions.addAll(getWinningMoves(playerNo));
             return emptyPositions;
-        } else if (!getWinningMoves(0 - playerNo).isEmpty()) {
-            getWinningMoves(0 - playerNo).forEach((i) -> {
-                emptyPositions.add(i);
-            });
+        } else if (!getWinningMoves(-playerNo).isEmpty()) {
+            emptyPositions.addAll(getWinningMoves(-playerNo));
             return emptyPositions;
         }
 
         List<Integer> losingPositions = new ArrayList<>();
-        long omask = 1 << 24;
-        long xmask = omask << 25;
+        long oMask = 1 << 24;
+        long xMask = oMask << 25;
         for (int i = 0; i < 25; i++) {
             if (getLosingMoves(playerNo).contains(i)) {
                 losingPositions.add(i);
-            } else if ((boardValue & omask) == 0 && (boardValue & xmask) == 0) {
+            } else if ((boardValue & oMask) == 0 && (boardValue & xMask) == 0) {
                 emptyPositions.add(i);
             }
-            omask >>= 1;
-            xmask >>= 1;
+            oMask >>= 1;
+            xMask >>= 1;
         }
 
         return emptyPositions.isEmpty() ? losingPositions : emptyPositions;
@@ -335,7 +321,7 @@ public class Board {
         P2losingMoves.clear();
     }
 
-    public static long antiDiagFlip(long board) {
+    public static long antiDiagonalFlip(long board) {
         long mid = board & 0x2082083041041L;
         board = ((board & 0x200000100000L) >> 16) | ((board & 0x20000010L) << 16)
                 | ((board & 0x410000208000L) >> 12) | ((board & 0x410000208L) << 12)
@@ -345,7 +331,7 @@ public class Board {
         return board | mid;
     }
 
-    public static long diagFlip(long board) {
+    public static long diagonalFlip(long board) {
         long mid = board & 0x222220111110L;
         board = ((board & 0x2000001000000L) >> 24) | ((board & 0x2000001L) << 24)
                 | ((board & 0x1100000880000L) >> 18) | ((board & 0x44000022L) << 18)
@@ -355,52 +341,19 @@ public class Board {
         return board | mid;
     }
 
-    public static long horiFlip(long board) {
+    public static long horizontalFlip(long board) {
         long mid = board & 0x842108421084L;
         board = ((board & 0x25294A5294A52L) >> 1) | ((board & 0x1294A5294A529L) << 1);
         board = ((board & 0x318C6318C6318L) >> 3) | ((board & 0x6318C6318C63L) << 3);
         return board | mid;
     }
 
-    public static long vertFlip(long board) {
+    public static long verticalFlip(long board) {
         return ((board << 20) & 0x3E00001F00000L)
                 | ((board << 10) & 0x1F00000F8000L)
                 | (board & 0xF800007C00L)
                 | ((board >> 10) & 0x7C00003E0L)
                 | ((board >> 20) & 0x3E00001FL);
-    }
-
-    public void printBoard() {
-        long omask = 1 << 24;
-        long xmask = omask << 25;
-        System.out.println("   0 1 2 3 4");
-        for (int i = 0; i < 25; i++) {
-            if (i % 5 == 0) {
-                System.out.print("\n" + (i / 5) + "  ");
-            }
-            if ((boardValue & omask) != 0) {
-                System.out.print("O ");
-            } else if ((boardValue & xmask) != 0) {
-                System.out.print("X ");
-            } else {
-                System.out.print("- ");
-            }
-            omask >>= 1;
-            xmask >>= 1;
-        }
-        System.out.println();
-    }
-
-    public static long arToLong(int[][] boardValues) {
-        long board = 0;
-        for (int i = 0; i < DEFAULT_BOARD_SIZE; i++) {
-            for (int j = 0; j < DEFAULT_BOARD_SIZE; j++) {
-                if (boardValues[i][j] != 0) {
-                    board |= mask(i, j, boardValues[i][j]);
-                }
-            }
-        }
-        return board;
     }
 
     public Board prevBoard(int moves) {
@@ -425,16 +378,8 @@ public class Board {
         return boardValue;
     }
 
-    public void setBoardValue(long boardValue) {
-        this.boardValue = boardValue;
-    }
-
     public int getTotalMoves() {
         return totalMoves;
-    }
-
-    public void setTotalMoves(int totalMoves) {
-        this.totalMoves = totalMoves;
     }
 
     private HashSet<Integer> getWinningMoves(int playerNo) {
@@ -455,10 +400,6 @@ public class Board {
 
     public int getPrevMove() {
         return prevMove;
-    }
-
-    public void setPrevMove(int prevMove) {
-        this.prevMove = prevMove;
     }
 
     public List<Integer> getAllMoves() {
