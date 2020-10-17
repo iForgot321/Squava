@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author iForgot321 2020-06-04
+ * @author iForgot321
  *
  */
 public class Squava extends JPanel implements ActionListener{
